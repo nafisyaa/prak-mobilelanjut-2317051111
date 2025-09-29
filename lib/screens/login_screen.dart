@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'signup_screen.dart';
+import 'dashboard_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   static const route = '/signin';
@@ -31,7 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
         );
 
     // tombol biru dengan gradient (UI-only)
-    Widget primaryButton(String label, VoidCallback onTap) => GestureDetector(
+    Widget primaryButton({required String label, required VoidCallback onTap}) => GestureDetector(
       onTap: onTap,
       child: Container(
         width: double.infinity,
@@ -148,11 +149,28 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       const SizedBox(height: 6),
 
-                      primaryButton('Sign In Now', () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Sign In tapped')),
-                        );
-                      }),
+                      primaryButton(
+                        label: 'Sign In Now', 
+                        onTap: () {
+                        // cek apakah email atau password kosong
+                        if (_email.text.isEmpty ||
+                            _pass.text.isEmpty){
+                            // jika iya, tampilkan notifikasi error
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Email dan password tidak boleh kosong!'),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                          } else {
+                            Navigator.pushNamedAndRemoveUntil(
+                              context, 
+                              DashboardScreen.route,
+                              (route) => false,
+                            );
+                          }
+                        },
+                      ),
                       const SizedBox(height: 14),
 
                       Center(
